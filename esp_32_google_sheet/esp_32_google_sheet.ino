@@ -110,7 +110,7 @@ void addtoSheet(char *data) {
 
 void loop() {
   bool ready = GSheet.ready();
-  xbee.readPacket(5000);
+  xbee.readPacket();
   if(ready && xbee.getResponse().isAvailable() && xbee.getResponse().getApiId() == ZB_RX_RESPONSE) {
     xbee.getResponse().getZBRxResponse(rx);
     addtoSheet((char *) rx.getData());
