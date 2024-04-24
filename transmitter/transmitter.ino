@@ -31,7 +31,7 @@ void setup() {
 	}
  
 	Serial.println(""); 	  // blank new line
-  dht.begin();            // begin dht sensor
+  dht.begin();        // begin dht sensor
 }
 
 // Main Loop //
@@ -61,11 +61,11 @@ void loop() {
   // Serial Print out //
   //char payload[256];
   long h_int = h * 1000;
-  long t_int = t * 1000;
+  long f_int = f * 1000;
 
   //char payload[] = "Humidity: " + h_string + ", Temperature: " + t_string + "\n";
-  char payload[256];
-  int payload_size = snprintf(payload, sizeof(payload), "Light: %d, Humidity: %ld.%ld, Temperature: %ld.%ld\n", analogRead(A_PIN), h_int / 1000, h_int % 1000, t_int / 1000, t_int % 1000);
+  char payload[100];
+  int payload_size = snprintf(payload, sizeof(payload), "Light: %d, Humidity: %ld.%03ld, Temperature: %ld.%03ld", analogRead(A_PIN), h_int / 1000, h_int % 1000, f_int / 1000, f_int % 1000) + 1;
   // Serial.print(payload);
   ZBTxRequest zbTx = ZBTxRequest(addr64, payload, payload_size);
   // Serial.print(F(", Humidity: "));
