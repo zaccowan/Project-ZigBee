@@ -11,6 +11,9 @@
 #define DHTPIN 2          // Set pin 2
 #define DHTTYPE DHT22     // Set Sensor Type
 
+// You should change this for each station
+#define STATION_NAME "STATION_NAME"
+
 // Initalize Sensors //
 DHT dht(DHTPIN, DHTTYPE); // Init DHT22 Sensor
 
@@ -61,7 +64,7 @@ void loop() {
   long f_int = f * 1000;
 
   char payload[100];
-  int payload_size = snprintf(payload, sizeof(payload), "Light: %d, Humidity: %ld.%03ld, Temperature: %ld.%03ld", analogRead(A_PIN), h_int / 1000, h_int % 1000, f_int / 1000, f_int % 1000) + 1;
+  int payload_size = snprintf(payload, sizeof(payload), "S:" STATION_NAME " L:%d H:%ld.%03ld T:%ld.%03ld", analogRead(A_PIN), h_int / 1000, h_int % 1000, f_int / 1000, f_int % 1000) + 1;
   ZBTxRequest zbTx = ZBTxRequest(addr64, payload, payload_size);
   xbee.send(zbTx);
 	delay(5000);

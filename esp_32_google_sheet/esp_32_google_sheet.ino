@@ -81,7 +81,8 @@ void addtoSheet(char *data) {
 
   int light;
   long h_int, h_frac, f_int, f_frac;
-  sscanf(data, "Light: %d, Humidity: %ld.%03ld, Temperature: %ld.%03ld", &light, &h_int, &h_frac, &f_int, &f_frac);
+  char station_name[8];
+  sscanf(data, "S:%7s L:%d H:%ld.%03ld T:%ld.%03ld", station_name, &light, &h_int, &h_frac, &f_int, &f_frac);
   float humidity = (h_int * 1000 + h_frac) / 1000.0f;
   float temperature = (f_int * 1000 + f_frac) / 1000.0f;
 
@@ -92,10 +93,11 @@ void addtoSheet(char *data) {
   strftime(timestr, sizeof(timestr), "%F %H:%M:%S", localtime(&epochTime));
 
   valueRange.add("majorDimension", "COLUMNS");
-  valueRange.set("values/[0]/[0]", timestr);
-  valueRange.set("values/[1]/[0]", light); //[col]/[row]
-  valueRange.set("values/[2]/[0]", humidity); //[col]/[row]
-  valueRange.set("values/[3]/[0]", temperature); //[col]/[row]
+  valueRange.set("values/[0]/[0]", station_name);
+  valueRange.set("values/[1]/[0]", timestr);
+  valueRange.set("values/[2]/[0]", light);
+  valueRange.set("values/[3]/[0]", humidity);
+  valueRange.set("values/[4]/[0]", temperature);
 
   bool success = GSheet.values.append(&response, spreadsheetId, "Sheet1!A1", &valueRange);
   if (success) {
