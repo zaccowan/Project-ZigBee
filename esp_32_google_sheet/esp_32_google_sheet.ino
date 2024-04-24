@@ -7,7 +7,7 @@
 #define MAX_FRAME_DATA_SIZE 110
 
 XBee xbee = XBee();
-Rx16Response rx16 = Rx16Response();
+ZBRxResponse rx = ZBRxResponse();
 
 const char* WIFI_SSID = "cslab05WirelessTest";
 const char* WIFI_PASSWORD = "password";
@@ -82,8 +82,8 @@ void addtoSheet(char *data) {
   int light;
   long h_int, h_frac, f_int, f_frac;
   sscanf(data, "Light: %d, Humidity: %ld.%03ld, Temperature: %ld.%03ld", &light, &h_int, &h_frac, &f_int, &f_frac);
-  float humidity = h_int * 1000 + h_frac / 1000.0f;
-  float temperature = f_int * 1000 + f_frac / 1000.0f;
+  float humidity = (h_int * 1000 + h_frac) / 1000.0f;
+  float temperature = (f_int * 1000 + f_frac) / 1000.0f;
 
 
   char timestr[20];
@@ -109,9 +109,9 @@ void addtoSheet(char *data) {
 void loop() {
   bool ready = GSheet.ready();
   xbee.readPacket(5000);
-  if(ready && xbee.getResponse().isAvailable() && xbee.getResponse().getApiId() == RX_16_RESPONSE) {
-    xbee.getResponse().getRx16Response(rx16);
-    addtoSheet((char *) rx16.getData());
+  if(ready && xbee.getResponse().isAvailable() && xbee.getResponse().getApiId() == ZB_RX_RESPONSE) {
+    xbee.getResponse().getZBRxResponse(rx);
+    addtoSheet((char *) rx.getData());
   }
 }
 
